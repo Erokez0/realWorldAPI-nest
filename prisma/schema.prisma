@@ -1,0 +1,57 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+model Tag {
+  id        Int       @id @default(autoincrement())
+  title     String    @unique
+  createdAt DateTime  @default(now())
+  articles  Article[]
+}
+
+model Article {
+  id             Int      @id @default(autoincrement())
+  slug           String   @unique
+  title          String   @unique
+  description    String
+  body           String
+  author         User    @relation("Author", fields: [authorId], references: [id], onDelete: Cascade)
+  authorId       Int
+  tagList        Tag[]
+  createdAt      DateTime @default(now())
+  updatedAt      DateTime @updatedAt
+  favoritedBy    User[] @relation("Favorites")
+  favoritesCount Int      @default(0)
+  comments       Comment[]  @relation("Comments")
+}
+
+model User {
+  id       Int       @id @default(autoincrement())
+  email    String    @unique
+  password String
+  token    String?   @unique
+  username String    @unique
+  bio      String    @default("")
+  image    String?
+  articles Article[]  @relation("Author")
+  comments Comment[] @relation("Author")
+  follows User[] @relation("UserFollows")
+  following User[] @relation("UserFollows")
+  favorites Article[] @relation("Favorites")
+}
+
+model Comment {
+  id        Int      @id @default(autoincrement())
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  body      String
+  author    User?    @relation("Author", fields: [authorId], references: [id], onDelete: Cascade)
+  authorId  Int
+  article Article @relation("Comments", fields: [articleId], references: [id], onDelete: Cascade)
+  articleId Int
+}
