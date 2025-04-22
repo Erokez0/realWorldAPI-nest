@@ -26,7 +26,7 @@ export class ProfileController {
 	}
 
 	@Post(':username/follow')
-	@ApiResponse(ProfileResponseSchema)
+	@ApiResponse({ status: 200, ...ProfileResponseSchema})
 	@HttpCode(200)
 	@UseGuards(AuthGuard)
 	@UseInterceptors(RequestResponseInterceptor)
