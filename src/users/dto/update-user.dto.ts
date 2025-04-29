@@ -1,4 +1,9 @@
-import { ApiHideProperty, ApiProperty, ApiPropertyOptional, PartialType } from '@nestjs/swagger'
+import {
+  ApiHideProperty,
+  ApiProperty,
+  ApiPropertyOptional,
+  PartialType,
+} from '@nestjs/swagger'
 
 import { IsEmail, IsOptional, IsString, IsUrl } from 'class-validator'
 import { CreateUserDto } from './create-user.dto'
@@ -31,7 +36,7 @@ export class UpdateUserDto extends PartialType(CreateUserDto) {
   email?: string
 
   @ApiHideProperty()
-  @ApiPropertyOptional({readOnly: true})
+  @ApiPropertyOptional({ readOnly: true })
   @Optional()
   token?: string
 }

@@ -85,10 +85,14 @@ export class ArticleEntity implements ArticleEntityType {
   @Exclude()
   id: number
 
-  constructor(data: ArticleAuthorTagList, favorited: boolean, isFollowing: boolean) {
+  constructor(
+    data: ArticleAuthorTagList,
+    favorited: boolean,
+    isFollowing: boolean,
+  ) {
     Object.assign(this, data)
     this.author.following = isFollowing
-    this.favorited = favorited;
+    this.favorited = favorited
   }
 }
 
@@ -96,20 +100,20 @@ export const ArticleBodySchema = {
   schema: {
     properties: {
       article: {
-        $ref: getSchemaPath(CreateArticleDto)
-      }
-    }
-  }
+        $ref: getSchemaPath(CreateArticleDto),
+      },
+    },
+  },
 }
 
 export const ArticleResponseSchema = {
   schema: {
     properties: {
       article: {
-        $ref: getSchemaPath(ArticleEntity)
-      }
-    }
-  }
+        $ref: getSchemaPath(ArticleEntity),
+      },
+    },
+  },
 }
 
 export const ArticleListResponseSchema = {
@@ -118,12 +122,12 @@ export const ArticleListResponseSchema = {
       articles: {
         type: 'array',
         items: {
-          $ref: getSchemaPath(ArticleEntity)
-        }
+          $ref: getSchemaPath(ArticleEntity),
+        },
       },
       articlesCount: {
-        type: 'number'
-      }
-    }
-  }
+        type: 'number',
+      },
+    },
+  },
 }

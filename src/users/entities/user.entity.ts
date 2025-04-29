@@ -6,62 +6,62 @@ import { CreateUserDto } from '../dto/create-user.dto'
 import { UpdateUserDto } from '../dto/update-user.dto'
 
 export class UserEntity {
-	@ApiProperty()
-	email: string
+  @ApiProperty()
+  email: string
 
-	@ApiProperty()
-	token: string | undefined
+  @ApiProperty()
+  token: string | undefined
 
-	@ApiProperty()
-	username: string
+  @ApiProperty()
+  username: string
 
-	@ApiProperty()
-	bio: string
+  @ApiProperty()
+  bio: string
 
-	@ApiProperty()
-	image: string | null
+  @ApiProperty()
+  image: string | null
 
-	@ApiHideProperty()
-	@Exclude()
-	password: string
+  @ApiHideProperty()
+  @Exclude()
+  password: string
 
-	@ApiHideProperty()
-	@Exclude()
-	id: number
+  @ApiHideProperty()
+  @Exclude()
+  id: number
 
-	constructor(userData: Partial<User>) {
-		Object.assign(this, userData)
-	}
+  constructor(userData: Partial<User>) {
+    Object.assign(this, userData)
+  }
 }
 
 export const UserCreateSchema = {
-	schema: {
-		type: "object",
-		properties: {
-			user: {
-				$ref: getSchemaPath(CreateUserDto)
-			}
-		}
-	}
+  schema: {
+    type: 'object',
+    properties: {
+      user: {
+        $ref: getSchemaPath(CreateUserDto),
+      },
+    },
+  },
 }
 
 export const UserResponseSchema = {
-	schema: {
-		properties: {
-			user: {
-				$ref: getSchemaPath(UserEntity)
-			}
-		}
-	}
+  schema: {
+    properties: {
+      user: {
+        $ref: getSchemaPath(UserEntity),
+      },
+    },
+  },
 }
 
 export const UserUpdateSchema = {
-	schema: {
-		type: "object",
-		properties: {
-			user: {
-				$ref: getSchemaPath(UpdateUserDto)
-			}
-		}
-	}
+  schema: {
+    type: 'object',
+    properties: {
+      user: {
+        $ref: getSchemaPath(UpdateUserDto),
+      },
+    },
+  },
 }

@@ -9,7 +9,7 @@ export class ArticlesService {
   constructor(
     private prismaService: PrismaService,
     private libService: LibService,
-  ) { }
+  ) {}
 
   async create(article: CreateArticleDto, authorId: number) {
     return this.prismaService.article.create({
@@ -19,7 +19,7 @@ export class ArticlesService {
         author: {
           connect: {
             id: authorId,
-          }
+          },
         },
         tagList: {
           connectOrCreate: article.tagList?.map((tagName) => ({
@@ -68,7 +68,7 @@ export class ArticlesService {
       filterParams['favoritedBy'] = {
         some: {
           username: favoritedBy,
-        }
+        },
       }
     }
 
@@ -111,7 +111,9 @@ export class ArticlesService {
 
   update(slug: string, updateArticleDto: UpdateArticleDto) {
     if (updateArticleDto.title) {
-      updateArticleDto['slug'] = this.libService.generateSlug(updateArticleDto.title)
+      updateArticleDto['slug'] = this.libService.generateSlug(
+        updateArticleDto.title,
+      )
     }
 
     return this.prismaService.article.update({
@@ -162,8 +164,8 @@ export class ArticlesService {
           },
         },
         favoritesCount: {
-          increment: 1
-        }
+          increment: 1,
+        },
       },
       include: {
         tagList: { select: { title: true } },
@@ -188,8 +190,8 @@ export class ArticlesService {
           },
         },
         favoritesCount: {
-          decrement: 1
-        }
+          decrement: 1,
+        },
       },
       include: {
         tagList: { select: { title: true } },

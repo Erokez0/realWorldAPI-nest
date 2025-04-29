@@ -13,17 +13,23 @@ import {
   UseGuards,
   Req,
 } from '@nestjs/common'
-import { 
-  ApiBearerAuth, 
-  ApiBody, 
-  ApiCreatedResponse, 
-  ApiOkResponse, ApiQuery, 
-  ApiResponse
- } from '@nestjs/swagger'
+import {
+  ApiBearerAuth,
+  ApiBody,
+  ApiCreatedResponse,
+  ApiOkResponse,
+  ApiQuery,
+  ApiResponse,
+} from '@nestjs/swagger'
 import { ArticlesService } from './articles.service'
 import { CreateArticleDto } from './dto/create-article.dto'
 import { UpdateArticleDto } from './dto/update-article.dto'
-import { ArticleBodySchema, ArticleEntity, ArticleListResponseSchema, ArticleResponseSchema } from './entities/article.entity'
+import {
+  ArticleBodySchema,
+  ArticleEntity,
+  ArticleListResponseSchema,
+  ArticleResponseSchema,
+} from './entities/article.entity'
 import { Key } from 'src/common/decorators/key.decorator'
 import { RequestResponseInterceptor } from 'src/common/interceptors/request-response.interceptor'
 import { AuthGuard } from 'src/auth/auth.guard'
@@ -33,22 +39,25 @@ import { ReqUser, User } from 'src/common/decorators/user.decorator'
 @Controller('articles')
 @UseInterceptors(RequestResponseInterceptor)
 export class ArticlesController {
-  constructor (
+  constructor(
     private readonly articlesService: ArticlesService,
-    private readonly usersService: UsersService
-  ) { }
+    private readonly usersService: UsersService,
+  ) {}
 
   @Post()
   @Key('article')
   @ApiCreatedResponse(ArticleResponseSchema)
   @UseGuards(AuthGuard)
-  @ApiBearerAuth("Token")
+  @ApiBearerAuth('Token')
   @ApiBody(ArticleBodySchema)
-  async create(@Body() createArticleDto: CreateArticleDto, @User() user: ReqUser) {
+  async create(
+    @Body() createArticleDto: CreateArticleDto,
+    @User() user: ReqUser,
+  ) {
     return new ArticleEntity(
       await this.articlesService.create(createArticleDto, user.userId),
       false,
-      false
+      false,
     )
   }
 
@@ -61,14 +70,14 @@ export class ArticlesController {
   @ApiQuery({ name: 'favorited', required: false })
   @ApiQuery({ name: 'limit', required: false, default: 20 })
   @ApiQuery({ name: 'offset', required: false, default: 0 })
-  @ApiBearerAuth("Token")
+  @ApiBearerAuth('Token')
   async findAll(
     @Query('tag') tag: string,
     @Query('author') author: string,
     @Query('favorited') favoritedBy: string,
     @Query('limit') limit: number = 20,
     @Query('offset') offset: number = 0,
-    @User() user: ReqUser
+    @User() user: ReqUser,
   ) {
     const articles = await this.articlesService.findAll({
       tag,
@@ -77,12 +86,15 @@ export class ArticlesController {
       limit,
       offset,
     })
-    return articles.map(
-      (article) => {
-        const isFavorited = user? this.articlesService.isFavorited(article.slug, user.userId) : false;
-        const isFollowing = user? this.usersService.isFollowing(user.userId, article.authorId): false;
-        return new ArticleEntity(article, isFavorited, isFollowing);
-      })
+    return articles.map((article) => {
+      const isFavorited = user
+        ? this.articlesService.isFavorited(article.slug, user.userId)
+        : false
+      const isFollowing = user
+        ? this.usersService.isFollowing(user.userId, article.authorId)
+        : false
+      return new ArticleEntity(article, isFavorited, isFollowing)
+    })
   }
 
   @Get('/feed')
@@ -91,11 +103,11 @@ export class ArticlesController {
   @ApiOkResponse(ArticleListResponseSchema)
   @ApiQuery({ name: 'limit', required: false, default: 20 })
   @ApiQuery({ name: 'offset', required: false, default: 0 })
-  @ApiBearerAuth("Token")
+  @ApiBearerAuth('Token')
   async feed(
     @Query('limit') limit: number = 20,
     @Query('offset') offset: number = 0,
-    @User() user: ReqUser
+    @User() user: ReqUser,
   ) {
     const articles = await this.articlesService.findAll({
       tag: null,
@@ -104,47 +116,50 @@ export class ArticlesController {
       limit,
       offset,
     })
-    return articles.map(
-      (article) => {
-        const isFavorited = user? this.articlesService.isFavorited(article.slug, user.userId) : false;
-        const isFollowing = user? this.usersService.isFollowing(user.userId, article.authorId) : false;
-        return new ArticleEntity(article, isFavorited, isFollowing);
-      })
+    return articles.map((article) => {
+      const isFavorited = user
+        ? this.articlesService.isFavorited(article.slug, user.userId)
+        : false
+      const isFollowing = user
+        ? this.usersService.isFollowing(user.userId, article.authorId)
+        : false
+      return new ArticleEntity(article, isFavorited, isFollowing)
+    })
   }
 
   @Get(':slug')
   @Key('article')
   @ApiOkResponse(ArticleListResponseSchema)
-  @ApiBearerAuth("Token")
-  async findOne(
-    @Param('slug') slug: string,
-    @User() user: ReqUser
-  ) {
-    const article = await this.articlesService.findOne(slug);
+  @ApiBearerAuth('Token')
+  async findOne(@Param('slug') slug: string, @User() user: ReqUser) {
+    const article = await this.articlesService.findOne(slug)
     if (!article) {
       throw new NotFoundException(`Article "${slug}" does not exist `)
     }
-    const isFavorited = user? this.articlesService.isFavorited(slug, user.userId) : false;
-    const isFollowing = user? this.usersService.isFollowing(user.userId, article.authorId) : false;
-    return new ArticleEntity(article, isFavorited, isFollowing);
+    const isFavorited = user
+      ? this.articlesService.isFavorited(slug, user.userId)
+      : false
+    const isFollowing = user
+      ? this.usersService.isFollowing(user.userId, article.authorId)
+      : false
+    return new ArticleEntity(article, isFavorited, isFollowing)
   }
 
   @Put(':slug')
   @Key('article')
   @ApiOkResponse(ArticleResponseSchema)
-  @ApiBearerAuth("Token")
+  @ApiBearerAuth('Token')
   async update(
     @Param('slug') slug: string,
     @Body() updateArticleDto: UpdateArticleDto,
-    @User() user: ReqUser
+    @User() user: ReqUser,
   ) {
     try {
-      const article = await this.articlesService.update(slug, updateArticleDto);
-      const isFavorited = user ? this.articlesService.isFavorited(slug, user.userId) : false;
-      return new ArticleEntity(
-        article,
-        isFavorited,
-        false)
+      const article = await this.articlesService.update(slug, updateArticleDto)
+      const isFavorited = user
+        ? this.articlesService.isFavorited(slug, user.userId)
+        : false
+      return new ArticleEntity(article, isFavorited, false)
     } catch {
       throw new NotFoundException(`Article ${slug} does not exist `)
     }
@@ -158,7 +173,7 @@ export class ArticlesController {
 
   @Post(':slug/favorite')
   @ApiOkResponse(ArticleResponseSchema)
-  @ApiBearerAuth("Token")
+  @ApiBearerAuth('Token')
   @UseGuards(AuthGuard)
   @Key('article')
   async favorite(@Param('slug') slug: string, @User() user: ReqUser) {
@@ -166,13 +181,19 @@ export class ArticlesController {
     if (!article) {
       throw new NotFoundException(`Article "${slug}" does not exist `)
     }
-    const isFollowing = user? this.usersService.isFollowing(user.userId, article.authorId) : false;
-    return new ArticleEntity( await this.articlesService.favorite(slug, user.userId), true, isFollowing );
+    const isFollowing = user
+      ? this.usersService.isFollowing(user.userId, article.authorId)
+      : false
+    return new ArticleEntity(
+      await this.articlesService.favorite(slug, user.userId),
+      true,
+      isFollowing,
+    )
   }
 
   @Delete(':slug/favorite')
-  @ApiResponse({status: 200, ...ArticleResponseSchema})
-  @ApiBearerAuth("Token")
+  @ApiResponse({ status: 200, ...ArticleResponseSchema })
+  @ApiBearerAuth('Token')
   @UseGuards(AuthGuard)
   @Key('article')
   async unfavorite(@Param('slug') slug: string, @User() user: ReqUser) {
@@ -180,7 +201,13 @@ export class ArticlesController {
     if (!article) {
       throw new NotFoundException(`Article "${slug}" does not exist `)
     }
-    const isFollowing = user? this.usersService.isFollowing(user.userId, article.authorId) : false;
-    return new ArticleEntity( await this.articlesService.unfavorite(slug, user.userId), false, isFollowing );
+    const isFollowing = user
+      ? this.usersService.isFollowing(user.userId, article.authorId)
+      : false
+    return new ArticleEntity(
+      await this.articlesService.unfavorite(slug, user.userId),
+      false,
+      isFollowing,
+    )
   }
 }

@@ -11,6 +11,6 @@ import { AuthModule } from 'src/auth/auth.module'
   imports: [PrismaModule, CommonModule],
   controllers: [UsersController, ProfileController],
   providers: [UsersService],
-  exports: [UsersService]
+  exports: [UsersService],
 })
-export class UsersModule { }
+export class UsersModule {}

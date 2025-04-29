@@ -1,9 +1,6 @@
 import { NestFactory, Reflector, HttpAdapterHost } from '@nestjs/core'
 import { SwaggerModule, DocumentBuilder } from '@nestjs/swagger'
-import {
-  ClassSerializerInterceptor,
-  ValidationPipe,
-} from '@nestjs/common'
+import { ClassSerializerInterceptor, ValidationPipe } from '@nestjs/common'
 import { AppModule } from './app.module'
 import { AppValidationPipe } from './app.validation.pipe'
 import { PrismaExceptionFilter } from './prisma/exception-filter.filter'
@@ -29,35 +26,39 @@ async function bootstrap() {
   app.useGlobalFilters(new PrismaExceptionFilter(httpAdapter))
 
   const config = new DocumentBuilder()
-    .addBearerAuth({
-      description: "JWT token",
-      name: "Authorization",
-      bearerFormat: "Token",
-      scheme: "bearer",
-      type: "http",
-      in: "header"
-    }, "Token")
+    .addBearerAuth(
+      {
+        description: 'JWT token',
+        name: 'Authorization',
+        bearerFormat: 'Token',
+        scheme: 'bearer',
+        type: 'http',
+        in: 'header',
+      },
+      'Token',
+    )
     // .addSecurityRequirements('Token')
     .setTitle('RealWorld API')
     .setVersion('1.0')
     .build()
 
-  const documentFactory = () => SwaggerModule.createDocument(app, config, {
-    extraModels: [
-      CreateUserDto,
-      SignInDto,
-      CreateArticleDto,
-      ArticleEntity,
-      UserEntity,
-      UpdateUserDto,
-      CommentEntity,
-      ProfileEntity
-    ]
-  },)
+  const documentFactory = () =>
+    SwaggerModule.createDocument(app, config, {
+      extraModels: [
+        CreateUserDto,
+        SignInDto,
+        CreateArticleDto,
+        ArticleEntity,
+        UserEntity,
+        UpdateUserDto,
+        CommentEntity,
+        ProfileEntity,
+      ],
+    })
   SwaggerModule.setup('api', app, documentFactory, {
     swaggerOptions: {
-      persistAuthorization: true
-    }
+      persistAuthorization: true,
+    },
   })
 
   // app.enableCors({

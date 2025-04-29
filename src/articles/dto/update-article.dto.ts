@@ -1,4 +1,6 @@
-import { OmitType, PartialType } from "@nestjs/swagger";
-import { CreateArticleDto } from "./create-article.dto";
+import { OmitType, PartialType } from '@nestjs/swagger'
+import { CreateArticleDto } from './create-article.dto'
 
-export class UpdateArticleDto extends PartialType(OmitType(CreateArticleDto, ['tagList'] as const)) { }
+export class UpdateArticleDto extends PartialType(
+  OmitType(CreateArticleDto, ['tagList'] as const),
+) {}

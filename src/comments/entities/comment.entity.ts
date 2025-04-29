@@ -3,90 +3,89 @@ import { Comment, Prisma } from '@prisma/client'
 import { Exclude, Type } from 'class-transformer'
 
 type CommentAuthor = Prisma.CommentGetPayload<{
-	include: {
-		author: {
-			select: {
-				username: true
-				bio: true
-				image: true
-			}
-		}
-	}
+  include: {
+    author: {
+      select: {
+        username: true
+        bio: true
+        image: true
+      }
+    }
+  }
 }>
 
-
 class Author {
-	username: string
-	bio: string | null
-	image: string
-	following: boolean
+  username: string
+  bio: string | null
+  image: string
+  following: boolean
 }
 // type CommentEntityType = Omit<
 //   CommentAuthor,
 //   'author' | 'authorId' | 'articleId'
 // > & {
 //   author: Author
-// } 
+// }
 export class CommentEntity {
-	@ApiProperty()
-	id: number
+  @ApiProperty()
+  id: number
 
-	@ApiProperty()
-	createdAt: Date
+  @ApiProperty()
+  createdAt: Date
 
-	@ApiProperty()
-	updatedAt: Date
+  @ApiProperty()
+  updatedAt: Date
 
-	@ApiProperty()
-	body: string
+  @ApiProperty()
+  body: string
 
-	@ApiHideProperty()
-	@Exclude()
-	articleId: number
+  @ApiHideProperty()
+  @Exclude()
+  articleId: number
 
-	@ApiHideProperty()
-	@Exclude()
-	authorId: number
+  @ApiHideProperty()
+  @Exclude()
+  authorId: number
 
-	@ApiProperty()
-	@Type(() => Author)
-	author: Author
+  @ApiProperty()
+  @Type(() => Author)
+  author: Author
 
-	constructor(userData: CommentAuthor, isFollowing: boolean) {
-		Object.assign(this, userData);
-		this.author.following = isFollowing
-	}
+  constructor(userData: CommentAuthor, isFollowing: boolean) {
+    Object.assign(this, userData)
+    this.author.following = isFollowing
+  }
 }
 
 export const CommentBodySchema = {
-	schema: {
-		properties: {
-			comment: {
-				properties: {
-					body: { type: 'string' },
-				},
-			},
-		},
-	}
+  schema: {
+    properties: {
+      comment: {
+        properties: {
+          body: { type: 'string' },
+        },
+      },
+    },
+  },
 }
 export const CommentResponseSchema = {
-	schema: {
-		properties: {
-			comment: {
-				$ref: getSchemaPath(CommentEntity)
-			}
-		}
-	}
+  schema: {
+    properties: {
+      comment: {
+        $ref: getSchemaPath(CommentEntity),
+      },
+    },
+  },
 }
 export const CommentListResponseSchema = {
-	schema: {
-		properties: {
-			comments: {
-				type: 'array',
-				items: {
-					$ref: getSchemaPath(CommentEntity)
-				}
-			}
-		}
-	}
+  schema: {
+    properties: {
+      comments: {
+        type: 'array',
+        items: {
+          $ref: getSchemaPath(CommentEntity),
+        },
+      },
+    },
+  },
 }

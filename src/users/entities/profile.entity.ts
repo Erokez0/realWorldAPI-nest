@@ -4,48 +4,48 @@ import { Exclude } from 'class-transformer'
 import { IsBoolean, IsOptional, isString } from 'class-validator'
 
 export class ProfileEntity {
-	@ApiHideProperty()
-	@Exclude()
-	email: string
+  @ApiHideProperty()
+  @Exclude()
+  email: string
 
-	@ApiHideProperty()
-	@Exclude()
-	token: string | undefined
+  @ApiHideProperty()
+  @Exclude()
+  token: string | undefined
 
-	@ApiProperty()
-	username: string
+  @ApiProperty()
+  username: string
 
-	@ApiProperty()
-	bio: string
+  @ApiProperty()
+  bio: string
 
-	@ApiProperty()
-	image: string | null
+  @ApiProperty()
+  image: string | null
 
-	@ApiHideProperty()
-	@Exclude()
-	password: string
+  @ApiHideProperty()
+  @Exclude()
+  password: string
 
-	@ApiHideProperty()
-	@Exclude()
-	id: number
+  @ApiHideProperty()
+  @Exclude()
+  id: number
 
-	@ApiProperty()
-	@IsBoolean()
-	following: boolean
+  @ApiProperty()
+  @IsBoolean()
+  following: boolean
 
-	constructor(user: Partial<User>, isFollowing: boolean) {
-		Object.assign(this, user)
-		this.following = isFollowing
-	}
+  constructor(user: Partial<User>, isFollowing: boolean) {
+    Object.assign(this, user)
+    this.following = isFollowing
+  }
 }
 
 export const ProfileResponseSchema = {
-	schema: {
-		type: 'object',
-		properties: {
-			profile: {
-				$ref: getSchemaPath(ProfileEntity),
-			}
-		}
-	}
+  schema: {
+    type: 'object',
+    properties: {
+      profile: {
+        $ref: getSchemaPath(ProfileEntity),
+      },
+    },
+  },
 }

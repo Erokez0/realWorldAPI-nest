@@ -14,15 +14,13 @@ export class UsersService {
   }
 
   findUserByEmail(email: string) {
-    return this.prismaService.user.findUnique({ 
-      where: {email},
-    });
+    return this.prismaService.user.findUnique({
+      where: { email },
+    })
   }
 
   findUserById(id: number) {
-    return this.prismaService.user.findUniqueOrThrow(
-      { where: { id } }
-    );
+    return this.prismaService.user.findUniqueOrThrow({ where: { id } })
   }
 
   findProfile(username: string) {
@@ -45,33 +43,33 @@ export class UsersService {
         id: followerId,
         following: {
           some: {
-            id: followedId
-          }
-        }
-      }
+            id: followedId,
+          },
+        },
+      },
     })
     return !!followed
   }
 
-  async follow(username: string,followerId: number) {
+  async follow(username: string, followerId: number) {
     return await this.prismaService.user.update({
       where: { username },
       data: {
         following: {
-          connect: { id: followerId }
-        }
-      }
+          connect: { id: followerId },
+        },
+      },
     })
   }
 
-  async unfollow(username: string,followerId: number) {
+  async unfollow(username: string, followerId: number) {
     return await this.prismaService.user.update({
       where: { username },
       data: {
         following: {
-          disconnect: { id: followerId }
-        }
-      }
+          disconnect: { id: followerId },
+        },
+      },
     })
   }
 }

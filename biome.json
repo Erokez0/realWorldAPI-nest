@@ -7,10 +7,7 @@
   },
   "files": {
     "ignoreUnknown": true,
-    "ignore": [
-      "node_modules",
-      "tests"
-    ]
+    "ignore": ["node_modules", "tests"]
   },
   "formatter": {
     "enabled": true,
@@ -104,9 +101,7 @@
         "useValidTypeof": "error"
       }
     },
-    "ignore": [
-      "eslint.config.mjs"
-    ]
+    "ignore": ["eslint.config.mjs"]
   },
   "javascript": {
     "formatter": {
@@ -120,21 +115,14 @@
       "attributePosition": "auto",
       "bracketSpacing": true
     },
-    "globals": [
-      "exports"
-    ],
+    "globals": ["exports"],
     "parser": {
       "unsafeParameterDecoratorsEnabled": true
     }
   },
   "overrides": [
     {
-      "include": [
-        "**/*.ts",
-        "**/*.tsx",
-        "**/*.mts",
-        "**/*.cts"
-      ],
+      "include": ["**/*.ts", "**/*.tsx", "**/*.mts", "**/*.cts"],
       "linter": {
         "rules": {
           "correctness": {
@@ -168,12 +156,7 @@
       }
     },
     {
-      "include": [
-        "**/*.ts",
-        "**/*.tsx",
-        "**/*.mts",
-        "**/*.cts"
-      ],
+      "include": ["**/*.ts", "**/*.tsx", "**/*.mts", "**/*.cts"],
       "linter": {
         "rules": {
           "correctness": {
